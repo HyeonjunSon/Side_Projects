@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer Application</title>
+    <title>Enhanced Timer Application</title>
     <link rel="stylesheet" href="Timer.css">
 </head>
 <body>
@@ -16,8 +16,20 @@
             <input type="number" id="seconds" placeholder="0" min="0" max="59">
         </div>
         <button id="start-btn">Start</button>
+        <button id="pause-btn" style="display: none;">Pause</button>
+        <button id="resume-btn" style="display: none;">Resume</button>
         <button id="reset-btn">Reset</button>
+        <button id="save-timer">Save Timer</button>
         <h2 id="countdown-display">00:00</h2>
+
+        <h3>Saved Timers</h3>
+        <select id="saved-timers"></select>
+
+        <h3>Timer History</h3>
+        <ul id="history-list"></ul>
+        <button id="clear-history-btn">Clear History</button>
+        <audio id="alarm-sound" src="alarm.mp3" preload="auto"></audio>
+        <button id="toggle-sound">Toggle Sound</button>
     </div>
 
     <script src="Timer.js"></script>

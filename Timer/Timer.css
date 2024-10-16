@@ -1,23 +1,33 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f4f4f4;
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    margin: 0;
+    padding: 20px;
 }
 
 .timer-container {
-    background-color: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     text-align: center;
-    width: 300px;
+    width: 350px;
+    max-width: 100%;
+    transition: all 0.3s ease-in-out;
 }
 
-h1 {
-    margin-bottom: 20px;
+.timer-container:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+h1, h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: 600;
 }
 
 .time-inputs {
@@ -26,28 +36,128 @@ h1 {
 
 input {
     width: 60px;
-    padding: 10px;
+    padding: 8px;
     font-size: 16px;
-    margin: 0 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin: 0 5px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s ease-in-out;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
 button {
     padding: 10px 20px;
-    margin: 10px;
+    margin: 5px;
     border: none;
-    background-color: #007bff;
+    background: linear-gradient(135deg, #007bff, #0056b3);
     color: white;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background 0.3s, transform 0.2s ease-in-out;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #0056b3, #003c82);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+button:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
 #countdown-display {
-    font-size: 2em;
+    font-size: 2.5em;
     margin-top: 20px;
+    background: #f7f7f7;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease-in-out;
+}
+
+#countdown-display.warning {
+    color: #d9534f;
+    background: #ffe0e0;
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 10px;
+    background: #f9f9f9;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+#history-list li {
+    background: #ffffff;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease-in-out;
+}
+
+#history-list li:hover {
+    background: #f1f1f1;
+}
+
+.clear-btn {
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background 0.2s ease-in-out;
+}
+
+.clear-btn:hover {
+    background: #c9302c;
+}
+
+#toggle-sound {
+    background: #5bc0de;
+    margin-top: 10px;
+}
+
+#toggle-sound:hover {
+    background: #31b0d5;
+}
+
+#lap-btn {
+    background: #5cb85c;
+}
+
+#lap-btn:hover {
+    background: #4cae4c;
+}
+
+#clear-history-btn {
+    background: #f0ad4e;
+    margin-top: 10px;
+}
+
+#clear-history-btn:hover {
+    background: #ec971f;
 }
