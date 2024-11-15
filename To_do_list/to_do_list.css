@@ -5,8 +5,8 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f7fa; /* Light teal background */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,60 +14,126 @@ body {
 }
 
 .container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 900px;
 }
 
 h1 {
     text-align: center;
+    font-size: 1.8em;
+    color: #00796b; /* Deep teal for header */
     margin-bottom: 20px;
 }
 
 .input-container {
     display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
     justify-content: space-between;
 }
 
 #todo-input {
-    width: 70%;
-    padding: 10px;
+    flex-grow: 1;
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#todo-input:focus {
+    border-color: #00796b; /* Match color of header */
+}
+
+#day-select {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#day-select:focus {
+    border-color: #00796b;
 }
 
 #add-btn {
-    padding: 10px 20px;
+    padding: 12px 25px;
     font-size: 16px;
-    background-color: #007bff;
+    background-color: #00796b;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 #add-btn:hover {
-    background-color: #0056b3;
+    background-color: #004d40; /* Darker teal on hover */
 }
 
-ul {
-    list-style: none;
-    margin-top: 20px;
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    width: 100%;
 }
 
-li {
+.day {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 160px;
+    text-align: center;
     display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    border-radius: 4px;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease;
 }
 
-li.completed {
+.day:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+}
+
+.day h2 {
+    font-size: 1.1em;
+    color: #37474f; /* Dark gray-blue for day headers */
+    margin-bottom: 10px;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.todo-list li {
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #b2dfdb; /* Light teal background for tasks */
+    border: 1px solid #80cbc4;
+    border-radius: 8px;
+    color: #004d40; /* Dark teal for text */
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.todo-list li:hover {
+    background-color: #80cbc4; /* Darker teal on hover */
+    transform: scale(1.03);
+}
+
+.todo-list li.completed {
     text-decoration: line-through;
     color: #888;
+    background-color: #cfd8dc; /* Light gray for completed tasks */
 }

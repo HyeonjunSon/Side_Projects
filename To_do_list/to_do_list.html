@@ -3,18 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
+    <title>Weekly To-Do List</title>
     <link rel="stylesheet" href="to_do_list.css">
 </head>
 <body>
     <div class="container">
-        <h1>To-Do List</h1>
+        <h1>Weekly To-Do List</h1>
         <div class="input-container">
-            <input type="text" id="todo-input" placeholder="할 일 추가하기...">
-            <button id="add-btn">추가</button>
+            <input type="text" id="todo-input" placeholder="Add your to-do...">
+            <select id="day-select">
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+                <option value="sunday">Sunday</option>
+            </select>
+            <button id="add-btn">Update</button>
         </div>
-        <ul id="todo-list"></ul>
+        
+        <!-- Calendar Layout -->
+        <div class="calendar">
+            <div class="day" id="monday">
+                <h2>Monday</h2>
+                <ul id="todo-list-monday" class="todo-list"></ul>
+            </div>
+            <div class="day" id="tuesday">
+                <h2>Tuesday</h2>
+                <ul id="todo-list-tuesday" class="todo-list"></ul>
+            </div>
+            <div class="day" id="wednesday">
+                <h2>Wednesday</h2>
+                <ul id="todo-list-wednesday" class="todo-list"></ul>
+            </div>
+            <div class="day" id="thursday">
+                <h2>Thursday</h2>
+                <ul id="todo-list-thursday" class="todo-list"></ul>
+            </div>
+            <div class="day" id="friday">
+                <h2>Friday</h2>
+                <ul id="todo-list-friday" class="todo-list"></ul>
+            </div>
+            <div class="day" id="saturday">
+                <h2>Saturday</h2>
+                <ul id="todo-list-saturday" class="todo-list"></ul>
+            </div>
+            <div class="day" id="sunday">
+                <h2>Sunday</h2>
+                <ul id="todo-list-sunday" class="todo-list"></ul>
+            </div>
+        </div>
     </div>
+    
     <script src="to_do_list.js"></script>
 </body>
 </html>
