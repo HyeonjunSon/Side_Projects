@@ -46,10 +46,6 @@ class BoardForm extends Component {
     this.getBoardList();
   }
 
-  handlePostWrite = () => {
-    this.getBoardList(); // 새로고침
-  };
-
   handleWrite = () => {
     const send_param = {
       headers,
@@ -106,6 +102,10 @@ class BoardForm extends Component {
       .catch((err) => {
         console.log(err);
       });
+  };
+ 
+  handlePostWrite = () => {
+    this.getBoardList(); // 새로고침
   };
 
   render() {
