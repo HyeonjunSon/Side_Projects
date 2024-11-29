@@ -58,7 +58,7 @@ class BoardDetail extends Component {
     };
 
     axios
-      .get(`http://localhost:8080/board/detail/${this.state.query._id}`, { headers })
+      .get(`http://localhost:8080/board/detail/${this.state.query_id}`, { headers })
       .then(returnData => {
         if (returnData.data.board) {
           const boardData = returnData.data.board;
