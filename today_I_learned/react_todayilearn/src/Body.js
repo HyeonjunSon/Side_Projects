@@ -4,7 +4,7 @@ import BoardForm from "./BoardForm";
 import BoardWriteForm from "./BoardWriteForm";
 import BoardDetail from "./BoardDetail";
 import MypageForm from "./MypageForm";
-import { Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 import $ from "jquery";
 import {} from "jquery.cookie";
 
@@ -15,9 +15,9 @@ class Body extends Component {
       <div>
         <Routes>
           <Route path="/" element={isLoggedIn ? <BoardForm /> : <LoginForm />} />
-          <Route path="/mypage" element={<MypageForm />} />
+          <Route path="/mypageForm" element={<MypageForm />} />
           <Route path="/boardWrite" element={<BoardWriteForm />} />
-          <Route path="/board/detail" element={<BoardDetail />} />
+          <Route path="/board/detail/:_id" element={<BoardDetail />} />
         </Routes>
       </div>
     );

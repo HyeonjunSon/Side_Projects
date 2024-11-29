@@ -1,52 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const Board = require("../schemas/board");
-
-// 게시글 삭제
-router.post("/delete", async (req, res) => {
-  try {
-    await Board.deleteOne({ _id: req.body._id });
-    res.json({ message: true });
-  } catch (err) {
-    console.error(err);
-    res.json({ message: false });
-  }
-});
-
-// 게시글 수정
-router.post("/update", async (req, res) => {
-  try {
-    await Board.updateOne(
-      { _id: req.body._id },
-      {
-        $set: {
-          title: req.body.title,
-          content: req.body.content,
-        },
-      }
-    );
-    res.json({ message: "게시글이 수정되었습니다." });
-  } catch (err) {
-    console.error(err);
-    res.json({ message: false });
-  }
-});
+const mongoose = require("mongoose");
 
 // 게시글 작성
 router.post("/write", async (req, res) => {
   try {
+    console.log("POST /write 요청 데이터: ", req.body);  // 요청 데이터 로그
+
     const obj = {
-      writer: req.body._id,
+      writer: new mongoose.Types.ObjectId(req.body._id),  // ObjectId 변환
       title: req.body.title,
       content: req.body.content,
     };
 
+    console.log("MongoDB에 저장할 데이터: ", obj);  // 저장 전 데이터 로그
+
     const board = new Board(obj);
-    await board.save();
+    await board.save();  // 데이터 저장
     res.json({ message: "게시글이 업로드되었습니다." });
   } catch (err) {
-    console.error(err);
-    res.json({ message: false });
+    console.error("데이터 저장 실패: ", err);  // 에러 로그
+    res.status(500).json({ message: "데이터 저장 실패", error: err.message });
   }
 });
 
@@ -54,8 +29,7 @@ router.post("/write", async (req, res) => {
 router.post("/getBoardList", async (req, res) => {
   try {
     const _id = req.body._id;
-    const board = await Board.find({ writer: _id })
-      .sort({ createdAt: -1 }); // 정렬
+    const board = await Board.find({ writer: _id }).sort({ createdAt: -1 });  // 정렬
     res.json({ list: board });
   } catch (err) {
     console.error(err);
@@ -64,14 +38,54 @@ router.post("/getBoardList", async (req, res) => {
 });
 
 // 게시글 상세보기
-router.post("/detail", async (req, res) => {
+router.get("/detail/:id", async (req, res) => {
   try {
-    const _id = req.body._id;
-    const board = await Board.findById(_id); // findById 사용 권장
+    const id = req.params.id;
+    console.log("상세보기 요청 ID: ", id);
+    const board = await Board.findById(id);
+    if (!board) {
+      return res.status(404).json({ message: "게시글을 찾을 수 없습니다." });
+    }
     res.json({ board });
   } catch (err) {
-    console.error(err);
-    res.json({ message: false });
+    console.error("게시글 상세보기 실패: ", err);
+    res.status(500).json({ message: "게시글 상세보기 실패", error: err.message });
+  }
+});
+
+// 게시글 수정
+router.post("/update", async (req, res) => {
+  try {
+    const result = await Board.updateOne(
+      { _id: req.body._id },
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+        },
+      }
+    );
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "수정할 게시글을 찾을 수 없습니다." });
+    }
+    res.json({ message: "게시글이 수정되었습니다." });
+  } catch (err) {
+    console.error("게시글 수정 실패: ", err);
+    res.status(500).json({ message: "게시글 수정 실패", error: err.message });
+  }
+});
+
+// 게시글 삭제
+router.post("/delete", async (req, res) => {
+  try {
+    const result = await Board.deleteOne({ _id: req.body._id });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "삭제할 게시글을 찾을 수 없습니다." });
+    }
+    res.json({ message: true });
+  } catch (err) {
+    console.error("게시글 삭제 실패: ", err);
+    res.status(500).json({ message: "게시글 삭제 실패", error: err.message });
   }
 });
 

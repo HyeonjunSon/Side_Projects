@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
 import axios from "axios";
 import $ from "jquery";
 import {} from "jquery.cookie";
@@ -12,18 +11,26 @@ class BoardRow extends Component {
     return (
       <tr>
         <td>
-          <NavLink
-            to={{ pathname: "/board/detail", query: { _id: this.props._id } }}
+          <a
+            href={`/board/detail/${this.props._id}`}
+            onClick={(e) => {
+              e.preventDefault(); // 기본 동작 방지
+              window.location.href = `/board/detail/${this.props._id}`; // URL 변경 및 새로고침
+            }}
           >
             {this.props.createdAt.substring(0, 10)}
-          </NavLink>
+          </a>
         </td>
         <td>
-          <NavLink
-            to={{ pathname: "/board/detail", query: { _id: this.props._id } }}
+          <a
+            href={`/board/detail/${this.props._id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = `/board/detail/${this.props._id}`;
+            }}
           >
             {this.props.title}
-          </NavLink>
+          </a>
         </td>
       </tr>
     );
@@ -39,29 +46,51 @@ class BoardForm extends Component {
     this.getBoardList();
   }
 
+  handlePostWrite = () => {
+    this.getBoardList(); // 새로고침
+  };
+
+  handleWrite = () => {
+    const send_param = {
+      headers,
+      title: "테스트 제목", // 임시 제목
+      content: "테스트 내용", // 임시 내용
+      _id: $.cookie("login_id"), // 작성자 ID
+    };
+
+    axios
+      .post("http://localhost:8080/board/write", send_param)
+      .then(() => {
+        alert("글 작성 완료");
+        this.handlePostWrite(); // 작성 후 목록 새로고침
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("글 작성 실패");
+      });
+  };
+
   getBoardList = () => {
     const send_param = {
       headers,
-      _id: $.cookie("login_id")
+      _id: $.cookie("login_id"),
     };
     axios
       .post("http://localhost:8080/board/getBoardList", send_param)
-      .then(returnData => {
+      .then((returnData) => {
         let boardList;
         if (returnData.data.list.length > 0) {
-          // console.log(returnData.data.list.length);
-          const boards = returnData.data.list;
-          boardList = boards.map(item => (
+          const board = returnData.data.list;
+          boardList = board.map((item) => (
             <BoardRow
-              key={Date.now() + Math.random() * 500}
+              key={item._id} // MongoDB ID 사용
               _id={item._id}
               createdAt={item.createdAt}
               title={item.title}
             ></BoardRow>
           ));
-          // console.log(boardList);
           this.setState({
-            boardList: boardList
+            boardList: boardList,
           });
         } else {
           boardList = (
@@ -70,12 +99,11 @@ class BoardForm extends Component {
             </tr>
           );
           this.setState({
-            boardList: boardList
+            boardList: boardList,
           });
-          // window.location.reload();
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -97,6 +125,10 @@ class BoardForm extends Component {
             </thead>
             <tbody>{this.state.boardList}</tbody>
           </Table>
+        </div>
+        {/* 글 작성 버튼 추가 */}
+        <div style={{ margin: "20px 50px" }}>
+          <button onClick={this.handleWrite}>글 작성</button>
         </div>
       </div>
     );

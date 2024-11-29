@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Button } from "react-bootstrap";
-import { loadReCaptcha, ReCaptcha } from "react-recaptcha-v3";
+import ReCAPTCHA from "react-google-recaptcha"; // 변경된 부분
 import axios from "axios";
 import $ from "jquery";
 import {} from "jquery.cookie";
@@ -8,13 +8,7 @@ axios.defaults.withCredentials = true;
 const headers = { withCredentials: true };
 
 class LoginForm extends Component {
-  componentDidMount() {
-    loadReCaptcha("6LfGieAUAAAAAJSOoqXS5VQdT_e5AH8u0n2e1PDb");
-  }
-
-  verifyCallback = (recaptchaToken) => {
-    console.log(recaptchaToken, "<= your recaptcha token");
-  };
+  recaptchaRef = React.createRef(); // 새로운 recaptchaRef 추가
 
   join = () => {
     const joinEmail = this.joinEmail.value;
@@ -23,7 +17,7 @@ class LoginForm extends Component {
     const regExp =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     const regExp2 = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
-
+  
     if (!joinEmail) {
       alert("이메일 주소를 입력해주세요.");
       this.joinEmail.focus();
@@ -76,6 +70,7 @@ class LoginForm extends Component {
         console.log(err);
       });
   };
+  
 
   login = () => {
     const loginEmail = this.loginEmail.value;
@@ -111,6 +106,28 @@ class LoginForm extends Component {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  onRecaptchaChange = (value) => {
+    console.log("Captcha value:", value); // 토큰을 로그로 확인
+
+    // 서버로 토큰을 전송 (예시)
+    fetch("/verify-recaptcha", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recaptchaToken: value, // 토큰 사용
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Server response:", data);
+      })
+      .catch((error) => {
+        console.error("Error verifying reCAPTCHA:", error);
       });
   };
 
@@ -187,11 +204,12 @@ class LoginForm extends Component {
           />
         </Form.Group>
 
-        <ReCaptcha
+        {/* ReCaptcha 변경 */}
+        <ReCAPTCHA
           sitekey="6LfGieAUAAAAAJSOoqXS5VQdT_e5AH8u0n2e1PDb"
-          action="login"
-          verifyCallback={this.verifyCallback}
+          onChange={this.onRecaptchaChange}
         />
+
         <Button
           style={buttonStyle}
           onClick={this.login}

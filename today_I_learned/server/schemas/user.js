@@ -31,6 +31,9 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   }
+}, {
+  timestamps: true,  // createdAt, updatedAt 자동 추가
+  collection: "user",  // 컬렉션 이름을 "user"로 명시적으로 설정
 });
 
 module.exports = mongoose.model("User", userSchema);

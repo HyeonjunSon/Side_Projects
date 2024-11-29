@@ -14,7 +14,7 @@ root.render(
       <div>
         <Header />
         <Body />
-        <Footer />
+        <Footer /> 
       </div>
     </BrowserRouter>
   </React.StrictMode>

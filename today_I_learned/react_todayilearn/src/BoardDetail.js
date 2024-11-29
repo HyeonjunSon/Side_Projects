@@ -7,14 +7,28 @@ const headers = { withCredentials: true };
 
 class BoardDetail extends Component {
   state = {
-    board: []
+    board: [],
+    query: {}
   };
 
   componentDidMount() {
-    if (this.props.location.query !== undefined) {
-      this.getDetail();
+    const searchParams = new URLSearchParams(window.location.search);
+    const query = {
+      _id: searchParams.get("_id"),
+      title: searchParams.get("title"),
+      content: searchParams.get("content")
+    };
+    
+    if (query._id) {
+      this.setState({ query }, () => this.getDetail());
     } else {
       window.location.href = "/";
+    }
+  }
+  
+  componentDidUpdate(prevProps) {
+    if (this.props.match.params._id !== prevProps.match.params._id) {
+      this.getDetail(); // URL 변경 시 데이터 재요청
     }
   }
 
@@ -26,7 +40,7 @@ class BoardDetail extends Component {
     if (window.confirm("정말 삭제하시겠습니까?")) {
       axios
         .post("http://localhost:8080/board/delete", send_param)
-        .then(returnData => {
+        .then(() => {
           alert("게시글이 삭제 되었습니다.");
           window.location.href = "/";
         })
@@ -38,30 +52,29 @@ class BoardDetail extends Component {
   };
 
   getDetail = () => {
-    const send_param = {
-      headers,
-      _id: this.props.location.query._id
-    };
+    const { _id } = this.state.query;
     const marginBottom = {
       marginBottom: 5
     };
+
     axios
-      .post("http://localhost:8080/board/detail", send_param)
+      .get(`http://localhost:8080/board/detail/${this.state.query._id}`, { headers })
       .then(returnData => {
-        if (returnData.data.board[0]) {
+        if (returnData.data.board) {
+          const boardData = returnData.data.board;
           const board = (
             <div>
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>{returnData.data.board[0].title}</th>
+                    <th>{boardData.title}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td
                       dangerouslySetInnerHTML={{
-                        __html: returnData.data.board[0].content
+                        __html: boardData.content
                       }}
                     ></td>
                   </tr>
@@ -71,11 +84,11 @@ class BoardDetail extends Component {
                 <NavLink
                   to={{
                     pathname: "/boardWrite",
-                    query: {
-                      title: returnData.data.board[0].title,
-                      content: returnData.data.board[0].content,
-                      _id: this.props.location.query._id
-                    }
+                    search: `?title=${encodeURIComponent(
+                      boardData.title
+                    )}&content=${encodeURIComponent(
+                      boardData.content
+                    )}&_id=${_id}`
                   }}
                 >
                   <Button className="btn-block" style={marginBottom}>
@@ -84,10 +97,7 @@ class BoardDetail extends Component {
                 </NavLink>
                 <Button
                   className="btn-block"
-                  onClick={this.deleteBoard.bind(
-                    null,
-                    this.props.location.query._id
-                  )}
+                  onClick={() => this.deleteBoard(_id)}
                 >
                   글 삭제
                 </Button>
@@ -103,6 +113,7 @@ class BoardDetail extends Component {
       })
       .catch(err => {
         console.log(err);
+        alert("글 상세 조회 중 오류 발생");
       });
   };
 

@@ -10,6 +10,16 @@ const pbkdf2 = util.promisify(crypto.pbkdf2);
 // 회원가입
 router.post("/join", async (req, res) => {
   try {
+    // ReCAPTCHA 검증 로직을 제거
+    // const recaptchaResponse = req.body.recaptchaToken;
+    // const secretKey = "your-secret-key";
+    // const recaptchaVerify = await axios.post(
+    //   `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaResponse}`
+    // );
+    // if (!recaptchaVerify.data.success) {
+    //   return res.json({ message: "ReCAPTCHA verification failed" });
+    // }
+
     let obj = { email: req.body.email };
 
     let user = await User.findOne(obj);
@@ -42,6 +52,7 @@ router.post("/join", async (req, res) => {
     res.json({ message: false });
   }
 });
+
 
 // 로그인
 router.post("/login", async (req, res) => {
